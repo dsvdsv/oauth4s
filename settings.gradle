@@ -1,0 +1,3 @@
+rootProject.name = 'oauth4s'
+
+include 'oauth2'
