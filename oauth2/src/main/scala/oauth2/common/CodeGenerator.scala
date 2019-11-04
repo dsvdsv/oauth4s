@@ -11,7 +11,8 @@ trait CodeGenerator[F[_]] {
 }
 
 object CodeGenerator {
-  private val defaultChars = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray
+  private val defaultChars =
+    "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray
 
   def default[F[_]: Sync, G[_]: Sync]: F[CodeGenerator[G]] =
     CodeGenerator[F, G](6)
