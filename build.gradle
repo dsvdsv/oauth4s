@@ -29,8 +29,10 @@ subprojects {
 		newtype = '0.4.3'
 		refined = '0.9.10'
 
-		magnolia = '0.12.0'
+//		magnolia = '0.12.0'
 		logback = '1.2.3'
+
+		monocle = '2.0.0'
 
 		catsScalatest = '3.0.0'
 		scalacheck = '1.14.2'
@@ -61,6 +63,14 @@ subprojects {
 		implementation "org.typelevel:cats-mtl-core_${scala}:${catsMTL}"
 		implementation "org.typelevel:cats-tagless-core_${scala}:${catstagless}"
 		implementation "org.typelevel:cats-tagless-macros_${scala}:${catstagless}"
+
+//		implementation "com.beachape:enumeratum_${scala}:1.5.13"
+//		implementation "com.beachape:enumeratum-cats_${scala}:1.5.16"
+//		implementation "com.beachape:enumeratum-doobie_${scala}:1.5.15"
+//		implementation "com.beachape:enumeratum-circe_${scala}:1.5.22"
+
+		implementation "com.github.julien-truffaut:monocle-core_${scala}:${monocle}"
+		implementation "com.github.julien-truffaut:monocle-macro_${scala}:${monocle}"
 
 		implementation "eu.timepit:refined_${scala}:${refined}"
 
