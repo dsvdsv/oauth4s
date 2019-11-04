@@ -9,7 +9,7 @@ sealed abstract class ApprovalStatus private (val repl: String) extends Serializ
 
 object ApprovalStatus {
   case object Approved extends ApprovalStatus("APPROVED")
-  case object Denied extends ApprovalStatus("DENIED")
+  case object Denied   extends ApprovalStatus("DENIED")
 
   val all = Array(Approved, Denied)
   val fromCode: Prism[String, ApprovalStatus] =
