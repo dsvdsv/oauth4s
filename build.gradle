@@ -1,44 +1,64 @@
 buildscript {
 	repositories {
 		mavenCentral()
+		jcenter()
+		maven {
+			url "https://repo.gradle.org/gradle/libs-releases-local"
+		}
 	}
 
 	dependencies {
-		classpath 'ch.epfl.scala:gradlebloop212_2.12:1.3.4'
+		classpath 'ch.epfl.scala:gradle-bloop_2.12:1.4.3'
+	}
+}
+
+allprojects {
+	apply plugin: 'scala'
+	apply plugin: 'bloop'
+	apply plugin: 'idea'
+
+	idea {
+		module {
+			downloadJavadoc = true
+			downloadSources = true
+		}
 	}
 }
 
 subprojects {
-	apply plugin: 'scala'
-	apply plugin: 'bloop'
+	version = '0.1'
+
+	repositories {
+		jcenter()
+	}
+
+	configurations {
+		kindProjectorPlugin
+		semanticDbPlugin
+	}
 
 	project.ext {
 		scala = '2.13'
-		scalaMinor = "${scala}.1"
-		cats = '2.0.0'
-		catsEffect = '2.0.0'
-		catsMTL = '0.7.0'
-		catstagless = '0.10'
-		http4s = '0.20.12'
-		circe = '0.12.3'
+		cats = '2.1.1'
+		catsEffect = '2.1.3'
+		catsMTL = '0.7.1'
+		catstagless = '0.11'
+		circe = '0.13.0'
 		circeExtras = '0.12.2'
 		circeConfig = '0.7.0'
-		doobie = '0.8.4'
 
-		flyway = '6.0.8'
-		newtype = '0.4.3'
-		refined = '0.9.10'
+		refined = '0.9.14'
 
-//		magnolia = '0.12.0'
 		logback = '1.2.3'
 
-		monocle = '2.0.0'
+		monocle = '2.0.4'
 
-		catsScalatest = '3.0.0'
-		scalacheck = '1.14.2'
+		catsScalatest = '3.1.1'
+		scalacheck = '1.14.3'
+		munit = '0.7.9'
 
 		kindProjector = '0.11.0'
-		semanticdb = '4.2.5'
+		semanticdb = '4.3.18'
 	}
 
 	repositories {
@@ -51,12 +71,11 @@ subprojects {
 	}
 
 	dependencies {
+		kindProjectorPlugin "org.typelevel:kind-projector_2.13.3:${kindProjector}"
+		semanticDbPlugin "org.scalameta:semanticdb-scalac_2.13.3:${semanticdb}"
 
-		kindProjectorPlugin "org.typelevel:kind-projector_${scalaMinor}:${kindProjector}"
-		semanticDbPlugin "org.scalameta:semanticdb-scalac_${scalaMinor}:${semanticdb}"
-
-		implementation "org.scala-lang:scala-library:${scalaMinor}"
-		implementation "org.scala-lang:scala-reflect:${scalaMinor}"
+		implementation "org.scala-lang:scala-library:${scala}.+"
+		implementation "org.scala-lang:scala-reflect:${scala}.+"
 
 		implementation "org.typelevel:cats-core_${scala}:${cats}"
 		implementation "org.typelevel:cats-effect_${scala}:${catsEffect}"
@@ -64,16 +83,13 @@ subprojects {
 		implementation "org.typelevel:cats-tagless-core_${scala}:${catstagless}"
 		implementation "org.typelevel:cats-tagless-macros_${scala}:${catstagless}"
 
-//		implementation "com.beachape:enumeratum_${scala}:1.5.13"
-//		implementation "com.beachape:enumeratum-cats_${scala}:1.5.16"
-//		implementation "com.beachape:enumeratum-doobie_${scala}:1.5.15"
-//		implementation "com.beachape:enumeratum-circe_${scala}:1.5.22"
-
 		implementation "com.github.julien-truffaut:monocle-core_${scala}:${monocle}"
 		implementation "com.github.julien-truffaut:monocle-macro_${scala}:${monocle}"
 
 		implementation "eu.timepit:refined_${scala}:${refined}"
 
+		testImplementation "org.scalameta:munit_${scala}:${munit}"
+		testImplementation "org.scalameta:munit-scalacheck_${scala}:${munit}"
 		testImplementation "org.scalacheck:scalacheck_${scala}:${scalacheck}"
 	}
 
@@ -99,6 +115,7 @@ subprojects {
 				"-deprecation", // Emit warning and location for usages of deprecated APIs.
 				"-explaintypes", // Explain type errors in more detail.
 				"-feature", // Emit warning and location for usages of features that should be imported explicitly.
+				"-language:postfixOps",
 				"-language:existentials", // Existential types (besides wildcard types) can be written and inferred
 				"-language:experimental.macros", // Allow macro definition (besides implementation and application)
 				"-language:higherKinds", // Allow higher-kinded types
@@ -113,7 +130,6 @@ subprojects {
 				"-Xlint:inaccessible", // Warn about inaccessible types in method signatures.
 				"-Xlint:infer-any", // Warn when a type argument is inferred to be `Any`.
 				"-Xlint:missing-interpolator", // A string literal appears to be missing an interpolator id.
-				"-Xlint:nullary-override", // Warn when non-nullary `def f()' overrides nullary `def f'.
 				"-Xlint:nullary-unit", // Warn when nullary methods return Unit.
 				"-Xlint:option-implicit", // Option.apply used implicit view.
 				"-Xlint:package-object-classes", // Class or object defined in package object.
@@ -127,7 +143,7 @@ subprojects {
 				"-Ywarn-unused:implicits", // Warn if an implicit parameter is unused.
 				"-Ywarn-unused:imports", // Warn if an import selector is not referenced.
 				"-Ywarn-unused:locals", // Warn if a local definition is unused.
-				"-Ywarn-unused:params", // Warn if a value parameter is unused.
+//                "-Ywarn-unused:params", // Warn if a value parameter is unused.
 				"-Ywarn-unused:patvars", // Warn if a variable bound in a pattern is unused.
 				"-Ywarn-unused:privates", // Warn if a private member is unused.
 				"-Ywarn-value-discard", // Warn when non-Unit expression results are unused.
