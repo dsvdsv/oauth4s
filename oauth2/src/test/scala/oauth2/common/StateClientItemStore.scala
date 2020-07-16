@@ -25,6 +25,6 @@ object StateClientItemStore {
   def apply[F[_]: Monad](implicit FMS: MonadState[F, InnerState]): ClientItemStore[F] =
     new ClientItemStore[F] {
       def loadClientItem(clientId: String): F[Option[ClientItem]] =
-        FMS.inspect { _.clientItems.filter(_.clientId.contains(clientId)) }
+        FMS.inspect { _.clientItems.find(_.clientId.contains(clientId)) }
     }
 }
