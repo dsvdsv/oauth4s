@@ -3,10 +3,11 @@ package oauth2.common
 import cats.mtl.MonadState
 import cats.{Monad, Monoid}
 import monocle.macros.Lenses
+import oauth2.common.client.{Client, ClientStore}
 
 object StateClientItemStore {
   @Lenses
-  final case class InnerState(clientItems: List[ClientItem])
+  final case class InnerState(clientItems: List[Client])
 
   object InnerState {
     val empty = InnerState(List.empty)
@@ -22,9 +23,9 @@ object StateClientItemStore {
       }
   }
 
-  def apply[F[_]: Monad](implicit FMS: MonadState[F, InnerState]): ClientItemStore[F] =
-    new ClientItemStore[F] {
-      def loadClientItem(clientId: String): F[Option[ClientItem]] =
+  def apply[F[_]: Monad](implicit FMS: MonadState[F, InnerState]): ClientStore[F] =
+    new ClientStore[F] {
+      def loadClient(clientId: String): F[Option[Client]] =
         FMS.inspect { _.clientItems.find(_.clientId.contains(clientId)) }
     }
 }
