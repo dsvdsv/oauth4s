@@ -32,7 +32,7 @@ class Auth[F[_]: Monad: OAuth2ErrorThrow: OAuth2ConfigAsk] private (
           expires     <- computeExpiry
         } yield ()
       case ResponseType.Token =>
-        ???
+        OAuth2Error.ResponseTypeNotSupported.raise[F, AuthorizeResp]
     }
 
   private def pickupRedirectUrl(requestedRedirectOpt: Option[RedirectUri], client: Client): F[RedirectUri] = {
