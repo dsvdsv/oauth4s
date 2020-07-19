@@ -87,6 +87,7 @@ subprojects {
 		implementation "com.github.julien-truffaut:monocle-macro_${scala}:${monocle}"
 
 		implementation "eu.timepit:refined_${scala}:${refined}"
+		implementation "eu.timepit:refined-cats_${scala}:${refined}"
 
 		testImplementation "org.scalameta:munit_${scala}:${munit}"
 		testImplementation "org.scalameta:munit-scalacheck_${scala}:${munit}"
