@@ -1,4 +1,4 @@
-package oauth2.common
+package oauth2.common.approval
 
 import cats.Eq
 import cats.instances.string._
@@ -12,6 +12,7 @@ object ApprovalStatus {
   case object Denied   extends ApprovalStatus("DENIED")
 
   val all = Array(Approved, Denied)
+
   val fromCode: Prism[String, ApprovalStatus] =
     Prism[String, ApprovalStatus](code => all.find(_.repl === code))(_.repl)
 

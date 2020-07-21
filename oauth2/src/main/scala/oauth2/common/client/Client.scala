@@ -1,15 +1,17 @@
 package oauth2.common
+package client
+
+import monocle.macros.Lenses
 
 import scala.concurrent.duration.FiniteDuration
 
-final case class ClientItem(
-    clientId: String,
-    resourceIds: Set[String],
+@Lenses
+final case class Client(
+    clientId: ClientId,
     clientSecret: Option[String],
     scopes: Set[Scope],
     authorizedGrandTypes: Set[GrantType],
     registeredRedirectUri: Set[RedirectUri],
-    authorities: List[String],
     accessTokenValidity: Option[FiniteDuration],
     refreshTokenValidity: Option[FiniteDuration],
     autoApprove: Set[Scope]

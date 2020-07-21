@@ -3,10 +3,11 @@ package oauth2.common
 import cats.mtl.MonadState
 import cats.{Monad, Monoid}
 import monocle.macros.Lenses
+import oauth2.common.approval.{Approval, ApprovalStore}
 
 object StateApprovalItemStore {
   @Lenses
-  final case class InnerState(approvalItems: List[ApprovalItem])
+  final case class InnerState(approvalItems: List[Approval])
 
   object InnerState {
     val empty = InnerState(List.empty)
@@ -22,14 +23,14 @@ object StateApprovalItemStore {
       }
   }
 
-  def apply[F[_]: Monad](implicit FMS: MonadState[F, InnerState]): ApprovalItemStore[F] =
-    new ApprovalItemStore[F] {
-      def createApprovalItem(item: ApprovalItem): F[Unit] =
+  def apply[F[_]: Monad](implicit FMS: MonadState[F, InnerState]): ApprovalStore[F] =
+    new ApprovalStore[F] {
+      def createApproval(item: Approval): F[Unit] =
         FMS.modify { state =>
           state.copy(approvalItems = state.approvalItems :+ item)
         }
 
-      def loadApprovalItems(clientId: String): F[List[ApprovalItem]] =
+      def loadApprovals(clientId: String): F[List[Approval]] =
         FMS.inspect { _.approvalItems.filter(_.clientId.contains(clientId)) }
     }
 }
